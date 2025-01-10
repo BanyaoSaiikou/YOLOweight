@@ -1,0 +1,115 @@
+【1、Sciurus17 を起動する。　(Sciurus17)()(catkin_ws )】
+$ cd /home/sciurus/catkin_ws
+$ catkin_make
+$source devel/setup.bash
+$export ROS_IP="hostname -I| cut -d' ' -f1"   
+(この際、"hostname -I| cut -d' ' -f1"でIPを割り当てられない場合、)
+(  $ export ROS_IP=10.40.1.84)(＄ifconfig と入力する。PCのIPや使用状況を表示してくれる。)
+$ roslaunch sciurus17_bringup sciurus17_bringup.launch 
+
+
+
+
+
+
+【2、roscoreを起動する。　(PC)(sciurus17py3)()】
+$source ~/anaconda3/bin/activate
+$conda activate sciurus17py3
+
+$ export ROS_MASTER_URI=http://10.40.1.84:11311
+$ export ROS_IP="hostname -I| cut -d' ' -f1"     #できない場合PCのIP(export ROS_IP=10.40.0.155)
+$ export ROS_HOSTNAME=10.40.0.155　　#change pc ROS_HOSTNAME
+
+$roscore
+
+【3.1、ロボット眼の前の画像をPCに送る。首動く　(Sciurus17)()(catkin_ws)】
+$ rosrun sciurus17_examples  cai_getIMAGEandPUBLISH.py
+【3.2、2d_TO_3d　(Sciurus17)()(catkin_ws)】
+$ rosrun sciurus17_examples cai_listenterCOORD_NEW1221forbattery.py 
+【3.3、TF-change　(Sciurus17)()(catkin_ws)】
+ $ rosrun sciurus17_examples tuantd_object_position
+【3.4、ACTION　(Sciurus17)()(catkin_ws)】
+$rosrun sciurus17_examples picTEST_forBATTERY.py
+
+
+【4、PC側が画像をもらう。~/Desktop/workspace/RGB内の画像が更新する】
+【(PC)(sciurus17py3)(~/Desktop/workspace)】
+$source ~/anaconda3/bin/activate
+$conda activate sciurus17py3
+
+$ export ROS_MASTER_URI=http://10.40.1.84:11311
+$ export ROS_IP="hostname -I| cut -d' ' -f1"     #できない場合PCのIP(export ROS_IP=10.40.0.155)
+$ export ROS_HOSTNAME=10.40.0.155　　#change pc ROS_HOSTNAME
+
+$cd　~/Desktop/workspace
+$ catkin_make
+$source devel/setup.bash
+$rosrun sciurus17_examples imageSUBS.py
+
+【5、YOLOの起動。~/Desktop/YOLOv7-Pytorch-Segmentation/runs/predict-seg内が更新する】
+【(PC)(py38)(~/Desktop/YOLOv7-Pytorch-Segmentation)】
+$source ~/anaconda3/bin/activate
+$conda activate  py38
+
+$ export ROS_MASTER_URI=http://10.40.1.84:11311
+$ export ROS_IP="hostname -I| cut -d' ' -f1"     #できない場合PCのIP(export ROS_IP=10.40.0.155)
+$ export ROS_HOSTNAME=10.40.0.155　　#change pc ROS_HOSTNAME
+
+$ cd　~/Desktop/YOLOv7-Pytorch-Segmentation
+$python segment/predictGETfromPUBLISH单 一class.py --weights "runs/train-seg/yolov7-seg18/weights/best.pt" --source "/home/cwh/Desktop/workspace/image/RGB/4.png"
+
+（意味としては、predictGETfromPUBLISH单 一class.pyというpythonファイルを起動し、
+訓練済みの"runs/train-seg/yolov7-seg18/weights/best.pt"YOLOモデルを利用し、
+"/home/cwh/Desktop/workspace/image/RGB/4.png"の画像にラベルをつけて、
+"~/Desktop/YOLOv7-Pytorch-Segmentation/runs/predict-seg"内 に保存する）
+
+
+【6、UI画面を開く。(PC)(py38)(~/Desktop/python实用工具)】
+$source ~/anaconda3/bin/activate
+$conda activate  py38
+
+$ export ROS_MASTER_URI=http://10.40.1.84:11311
+$ export ROS_IP="hostname -I| cut -d' ' -f1"     #できない場合PCのIP(export ROS_IP=10.40.0.155)
+$ export ROS_HOSTNAME=10.40.0.155　　#change pc ROS_HOSTNAME
+
+$ cd　~/Desktop/python实用工具
+$python modelUI.py
+
+【7、UIに画像・文字情報を更新する機能を起動。~/Desktop/expTFファイル内に画像更新する】
+【(PC)(py38)(~/Desktop/workspace)】
+$ cd ~/Desktop/workspace
+$ catkin_make
+$source devel/setup.bash
+
+$source ~/anaconda3/bin/activate
+$conda activate  py38
+
+$ export ROS_MASTER_URI=http://10.40.1.84:11311
+$ export ROS_IP="hostname -I| cut -d' ' -f1"     #できない場合PCのIP(export ROS_IP=10.40.0.155)
+$ export ROS_HOSTNAME=10.40.0.155　　#change pc ROS_HOSTNAME
+
+$ rosrun sciurus17_examples zzlistenertest1223rename.py
+
+
+
+【8、VLM-Claudeを開く。(PC)(Claude)(~/Desktop/claude)】
+$source ~/anaconda3/bin/activate
+$conda activate   Claude
+
+$ export ROS_MASTER_URI=http://10.40.1.84:11311
+$ export ROS_IP="hostname -I| cut -d' ' -f1"     #できない場合PCのIP(export ROS_IP=10.40.0.155)
+$ export ROS_HOSTNAME=10.40.0.155　　#change pc ROS_HOSTNAME
+
+#python claudeAPI_defForBattery_Brain.py
+
+【9、VLM-Claudeを開く。(PC)(Claude)(~/Desktop/claude)】
+$source ~/anaconda3/bin/activate
+$conda activate   Claude
+
+$ export ROS_MASTER_URI=http://10.40.1.84:11311
+$ export ROS_IP="hostname -I| cut -d' ' -f1"     #できない場合PCのIP(export ROS_IP=10.40.0.155)
+$ export ROS_HOSTNAME=10.40.0.155　　#change pc ROS_HOSTNAME
+
+#python claudeAPI_def.py
+
+
