@@ -1,1 +1,1 @@
-YOLOweightに訓練済みのYOLOモデルが含まれる
+【YOLOweight】に訓練済みのYOLOモデルが含まれる
